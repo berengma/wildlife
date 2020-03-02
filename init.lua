@@ -1,6 +1,5 @@
 local abr = minetest.get_mapgen_setting('active_block_range')
 local abs = math.abs
-local node_lava = nil
 local random = water_life.random
 
 local wildlife = {}
@@ -99,23 +98,32 @@ function wildlife.hq_find_food(self,prty,radius)
 	end
     mobkit.queue_high(self,func,prty)
 end
-    
 
-local function lava_dmg(self,dmg)
-	node_lava = node_lava or minetest.registered_nodes[minetest.registered_aliases.mapgen_lava_source]
-	if node_lava then
-		local pos=self.object:get_pos()
-		local box = self.object:get_properties().collisionbox
-		local pos1={x=pos.x+box[1],y=pos.y+box[2],z=pos.z+box[3]}
-		local pos2={x=pos.x+box[4],y=pos.y+box[5],z=pos.z+box[6]}
-		local nodes=mobkit.get_nodes_in_area(pos1,pos2)
-		if nodes[node_lava] then mobkit.hurt(self,dmg) end
+
+local function node_dps_dmg(self)
+	local pos = self.object:get_pos()
+	local box = self.object:get_properties().collisionbox
+	local pos1 = {x = pos.x + box[1], y = pos.y + box[2], z = pos.z + box[3]}
+	local pos2 = {x = pos.x + box[4], y = pos.y + box[5], z = pos.z + box[6]}
+	local nodes_overlap = mobkit.get_nodes_in_area(pos1, pos2)
+	local total_damage = 0
+
+	for node_def, _ in pairs(nodes_overlap) do
+		local dps = node_def.damage_per_second
+		if dps then
+			total_damage = math.max(total_damage, dps)
+		end
+	end
+
+	if total_damage ~= 0 then
+		mobkit.hurt(self, total_damage)
 	end
 end
 
+
 local function predator_brain(self)
 	-- vitals should be checked every step
-	if mobkit.timer(self,1) then lava_dmg(self,6) end
+	if mobkit.timer(self,1) then node_dps_dmg(self) end
 	mobkit.vitals(self)
 --	if self.object:get_hp() <=100 then	
 	if self.hp <= 0 then	
@@ -160,7 +168,7 @@ end
 
 local function herbivore_brain(self)
 	if self.tamed == nil then self.tamed = false end
-	if mobkit.timer(self,1) then lava_dmg(self,6) end
+	if mobkit.timer(self,1) then node_dps_dmg(self) end
 	mobkit.vitals(self)
 
 	if self.hp <= 0 then	
@@ -272,7 +280,7 @@ local function spawnstep(dtime)
 					local mobname = dcnt>wcnt+1 and 'wildlife:wolf' or 'wildlife:deer'
 
 					pos2.y = height+0.5
-					objs = minetest.get_objects_inside_radius(pos2,abr*16-2)
+					local objs = minetest.get_objects_inside_radius(pos2,abr*16-2)
 					for _,obj in ipairs(objs) do				-- do not spawn if another player around
 						if obj:is_player() then return end
 					end
@@ -431,7 +439,7 @@ minetest.register_entity("wildlife:deer_tamed",{
 	max_hp = 20,
     hungry = 100,
 	tamed = true,
---	timeout = 600,
+	timeout = 0,
 	attack={range=0.5,damage_groups={fleshy=3}},
 	sounds = {
 		scared='deer_scared',
