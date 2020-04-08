@@ -332,6 +332,10 @@ minetest.register_entity("wildlife:wolf",{
 		attack='dogbite',
 		warn = 'angrydog',
 		},
+	animation = {
+	walk={range={x=10,y=29},speed=30,loop=true},
+	stand={range={x=1,y=5},speed=1,loop=true},
+	},
 	brainfunc = predator_brain,
 	
 	on_punch=function(self, puncher, time_from_last_punch, tool_capabilities, dir)
@@ -381,7 +385,11 @@ minetest.register_entity("wildlife:deer",{
 		scared='deer_scared',
 		hurt = 'deer_hurt',
 		},
-    drops = {
+	animation = {
+	walk={range={x=10,y=29},speed=30,loop=true},
+	stand={range={x=1,y=5},speed=1,loop=true},
+	},
+	drops = {
 		{name = "default:diamond", chance = 20, min = 1, max = 3,},		
 		{name = "water_life:meat_raw", chance = 2, min = 1, max = 3,},
 	},
@@ -445,6 +453,10 @@ minetest.register_entity("wildlife:deer_tamed",{
 		scared='deer_scared',
 		hurt = 'deer_hurt',
 		},
+	animation = {
+	walk={range={x=10,y=29},speed=30,loop=true},
+	stand={range={x=1,y=5},speed=1,loop=true},
+	},
     drops = {
 		{name = "water_life:meat_raw", chance = 2, min = 1, max = 3,},
 	},
