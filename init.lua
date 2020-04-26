@@ -1,4 +1,4 @@
-local abr = tonumber(minetest.get_mapgen_setting('active_block_range')= or 2
+local abr = tonumber(minetest.get_mapgen_setting('active_block_range')) or 2
 local abs = math.abs
 local random = water_life.random
 
