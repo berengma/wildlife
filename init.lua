@@ -407,8 +407,8 @@ minetest.register_entity("wildlife:deer",{
         if not clicker or not clicker:is_player() then return end
         local inv = clicker:get_inventory()
         local item = clicker:get_wielded_item()
-        
-        if not item or item:get_name() ~= "water_life:lasso" then return end
+        --minetest.chat_send_all(dump(item:get_name()))
+        if not item or item:get_name() ~= water_life.catchBA then return end
         if not inv:room_for_item("main", "wildlife:deer_item") then return end
         local pos = mobkit.get_stand_pos(self)
 		local name = clicker:get_player_name()
@@ -478,8 +478,8 @@ minetest.register_entity("wildlife:deer_tamed",{
         if not clicker or not clicker:is_player() then return end
         local inv = clicker:get_inventory()
         local item = clicker:get_wielded_item()
-        
-        if not item or item:get_name() ~= "water_life:lasso" then return end
+        --minetest.chat_send_all(dump(item:get_name()))
+        if not item or item:get_name() ~= water_life.catchBA then return end
         if not inv:room_for_item("main", "wildlife:deer_item") then return end
         local pos = mobkit.get_stand_pos(self)
 		local name = clicker:get_player_name()
