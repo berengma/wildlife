@@ -28,12 +28,30 @@ local function sortout(self,ftable)
 	end
 	return ftable
 end
-		
+
+
+function wildlife.hq_findpath(self,prty,tpos)
+	
+	local func = function(self)
+		if mobkit.is_queue_empty_low(self) and self.isonground then
+			local pos = self.object:get_pos()
+			if vector.distance(pos,tpos) > 1 then
+				
+				wildlife.gopath(self,tpos)
+				
+			else
+				return true
+			end
+		end
+	end
+	mobkit.queue_high(self,func,prty)
+end
+
 
 function wildlife.hq_goto(self,prty,tpos)
 	local func = function(self)
 		if mobkit.is_queue_empty_low(self) and self.isonground then
-			local pos = mobkit.get_stand_pos(self)
+			local pos = self.object:get_pos()
 			if vector.distance(pos,tpos) > 1 then
 				wildlife.goto_next_waypoint(self,tpos,0.5)
 			else
@@ -43,6 +61,40 @@ function wildlife.hq_goto(self,prty,tpos)
 	end
 	mobkit.queue_high(self,func,prty)
 end
+
+
+function wildlife.gopath(self,tpos)
+	local height, pos2 = wildlife.go_further(self,tpos)
+	if not speedfactor then speedfactor = 1 end
+	
+	if not height then return false end
+	
+	if height <= 0.01 then
+		local yaw = self.object:get_yaw()
+		local tyaw = minetest.dir_to_yaw(vector.direction(self.object:get_pos(),pos2))
+		if abs(tyaw-yaw) > 1 then
+			mobkit.lq_turn2pos(self,pos2) 
+		end
+		mobkit.lq_dumbwalk(self,pos2,speedfactor)
+	else
+		mobkit.lq_turn2pos(self,pos2) 
+		mobkit.lq_dumbjump(self,height) 
+	end
+	return true
+end
+
+
+function wildlife.go_further(self,tpos)
+	local height = 0
+	local pos = self.object:get_pos()
+	local way = pathfinder.find_path(pos, tpos, self, self.dtime)
+	if not way or #way < 2 then return nil end
+	
+	height = way[2].y - pos.y -0.5
+	--minetest.chat_send_all(dump(height))
+	return height, way[2]
+end
+
 
 
 function wildlife.goto_next_waypoint(self,tpos,speedfactor)
@@ -153,9 +205,15 @@ local function predator_brain(self)
 		end
 		
 		if prty < 9 then
-			local plyr = mobkit.get_nearby_player(self)					
-			if plyr and vector.distance(pos,plyr:get_pos()) < 10 then	-- if player close
-				mobkit.hq_warn(self,9,plyr)								-- try to repel them
+			local plyr = mobkit.get_nearby_player(self)
+			if plyr and vector.distance(pos,plyr:get_pos()) < 12 then	-- if player close
+				local ppos = plyr:get_pos()
+				--mobkit.hq_warn(self,9,plyr)								-- try to repel them
+				local pway = pathfinder.find_path(pos, ppos, self, self.dtime)
+				
+				if pway and #pway > 1 then
+					wildlife.hq_findpath(self,15,ppos)
+				end
 			end															-- hq_warn will trigger subsequent bhaviors if needed
 		end
 		
@@ -196,6 +254,15 @@ local function herbivore_brain(self)
 		end
 		
 		local pos = self.object:get_pos() 
+		
+		if prty < 15  then
+			local pred = mobkit.get_closest_entity(self,'water_life:croc')
+			if pred then 
+				mobkit.hq_runfrom(self,15,pred)
+                self.hungry = self.hungry -5
+				return
+			end
+		end
 		
 		if prty < 11  then
 			local pred = mobkit.get_closest_entity(self,'wildlife:wolf')
