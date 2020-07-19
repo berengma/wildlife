@@ -37,7 +37,7 @@ function wildlife.hq_findpath(self,prty,tpos)
 			local pos = self.object:get_pos()
 			if vector.distance(pos,tpos) > 1 then
 				
-				wildlife.gopath(self,tpos)
+				if not wildlife.gopath(self,tpos) then return true end
 				
 			else
 				return true
@@ -206,15 +206,22 @@ local function predator_brain(self)
 		
 		if prty < 9 then
 			local plyr = mobkit.get_nearby_player(self)
-			if plyr and vector.distance(pos,plyr:get_pos()) < 12 then	-- if player close
-				local ppos = plyr:get_pos()
-				--mobkit.hq_warn(self,9,plyr)								-- try to repel them
-				local pway = pathfinder.find_path(pos, ppos, self, self.dtime)
-				
-				if pway and #pway > 1 then
-					wildlife.hq_findpath(self,15,ppos)
-				end
-			end															-- hq_warn will trigger subsequent bhaviors if needed
+			if plyr then
+				local distance = vector.distance(pos,plyr:get_pos())
+				if distance < 12 then	-- if player close
+					if distance < 4 then
+						mobkit.hq_attack(self,16,plyr)
+					else
+						local ppos = plyr:get_pos()
+						--mobkit.hq_warn(self,9,plyr)								-- try to repel them
+						local pway = water_life.find_path(pos, ppos, self, self.dtime)
+						
+						if pway and #pway > 1 then
+							water_life.hq_findpath(self,15,ppos,3)
+						end
+					end
+				end															-- hq_warn will trigger subsequent bhaviors if needed
+			end
 		end
 		
 		-- fool around
