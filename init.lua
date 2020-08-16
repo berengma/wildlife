@@ -199,6 +199,8 @@ local function herbivore_brain(self)
 		
 		if prty < 11  then
 			local pred = mobkit.get_closest_entity(self,'wildlife:wolf')
+			if not pred then pred = mobkit.get_closest_entity(self,'water_life:snake') end
+			
 			if pred then 
 				mobkit.hq_runfrom(self,11,pred)
                 self.hungry = self.hungry -5
