@@ -240,7 +240,7 @@ local function spawnstep(dtime)
 	for _,plyr in ipairs(minetest.get_connected_players()) do
             
             spawntimer = 0
-			local vel = plyr:get_player_velocity()
+			local vel = plyr:get_velocity()
 			local spd = vector.length(vel)
 			local chance = spawn_rate * 1/(spd*0.75+1)  -- chance is quadrupled for speed=4
 
