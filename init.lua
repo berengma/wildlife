@@ -403,6 +403,7 @@ minetest.register_entity("wildlife:deer",{
 		self.object:set_velocity({x=hvel.x,y=2,z=hvel.z})
 		mobkit.make_sound(self,'hurt')
 		mobkit.hurt(self,tool_capabilities.damage_groups.fleshy or 1)
+		--minetest.chat_send_all(tool_capabilities.damage_groups.fleshy)
 	end,
 	
 	on_rightclick = function(self, clicker)
@@ -474,6 +475,7 @@ minetest.register_entity("wildlife:deer_tamed",{
 		mobkit.make_sound(self,'hurt')
 		self.tamed = false
 		mobkit.hurt(self,tool_capabilities.damage_groups.fleshy or 1)
+		--minetest.chat_send_all(tool_capabilities.damage_groups.fleshy)
 	end,
                                                 
 	on_rightclick = function(self, clicker)
