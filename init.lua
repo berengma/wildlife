@@ -318,13 +318,14 @@ minetest.register_entity("wildlife:wolf",{
 	get_staticdata = mobkit.statfunc,
 											-- api props
 	springiness=0,
-	buoyancy = 0.75,					-- portion of hitbox submerged
+	buoyancy = 0.75,
 	max_speed = 5,
 	jump_height = 1.26,
 	view_range = 24,
-	lung_capacity = 10, 		-- seconds
+	lung_capacity = 10,
 	max_hp = 24,
 	timeout=600,
+	is_mob = true,
     drops = {
 		{name = "default:diamond", chance = 20, min = 1, max = 3,},		
 		{name = "water_life:meat_raw", chance = 2, min = 1, max = 2,},
@@ -357,9 +358,8 @@ minetest.register_entity("wildlife:wolf",{
 })
 
 minetest.register_entity("wildlife:deer",{
-											-- common props
 	physical = true,
-	stepheight = 0.1,				--EVIL!
+	stepheight = 0.1,
 	collide_with_objects = true,
 	collisionbox = {-0.35, -0.19, -0.35, 0.35, 0.65, 0.35},
 	visual = "mesh",
@@ -368,20 +368,20 @@ minetest.register_entity("wildlife:deer",{
 	visual_size = {x = 1.3, y = 1.3},
 	static_save = true,
 	makes_footstep_sound = true,
-	on_step = mobkit.stepfunc,	-- required
-	on_activate = mobkit.actfunc,		-- required
+	on_step = mobkit.stepfunc,
+	on_activate = mobkit.actfunc,
 	get_staticdata = mobkit.statfunc,
-											-- api props
 	springiness=0,
 	buoyancy = 0.9,
 	max_speed = 5,
 	jump_height = 1.26,
 	view_range = 24,
-	lung_capacity = 20,			-- seconds
+	lung_capacity = 20,
 	max_hp = 20,
     hungry = 100,
 	tamed = false,
 	timeout = 600,
+	is_mob = true,
 	attack={range=0.5,damage_groups={fleshy=3}},
 	sounds = {
 		scared='deer_scared',
@@ -426,9 +426,8 @@ minetest.register_entity("wildlife:deer",{
 
 
 minetest.register_entity("wildlife:deer_tamed",{
-											-- common props
 	physical = true,
-	stepheight = 0.1,				--EVIL!
+	stepheight = 0.1,
 	collide_with_objects = true,
 	collisionbox = {-0.35, -0.19, -0.35, 0.35, 0.65, 0.35},
 	visual = "mesh",
@@ -437,20 +436,20 @@ minetest.register_entity("wildlife:deer_tamed",{
 	visual_size = {x = 1.3, y = 1.3},
 	static_save = true,
 	makes_footstep_sound = true,
-	on_step = mobkit.stepfunc,	-- required
-	on_activate = mobkit.actfunc,		-- required
+	on_step = mobkit.stepfunc,
+	on_activate = mobkit.actfunc,
 	get_staticdata = mobkit.statfunc,
-											-- api props
 	springiness=0,
 	buoyancy = 0.9,
 	max_speed = 5,
 	jump_height = 1.26,
 	view_range = 24,
-	lung_capacity = 20,			-- seconds
+	lung_capacity = 20,
 	max_hp = 20,
     hungry = 100,
 	tamed = true,
 	timeout = 0,
+	is_mob = true,
 	attack={range=0.5,damage_groups={fleshy=3}},
 	sounds = {
 		scared='deer_scared',
