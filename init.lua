@@ -73,30 +73,31 @@ function wildlife.hq_find_food(self,prty,radius)
     local pos1 = {x=pos.x -radius,y=pos.y-1,z=pos.z-radius}
     local pos2 = {x=pos.x +radius,y=pos.y+1,z=pos.z+radius}  --mobkit.pos_translate2d(pos,yaw,radius)
 	local food = minetest.find_nodes_in_area(pos1,pos2, {"group:growing","group:plant"})
-    if not food or #food < 1 then food = minetest.find_nodes_in_area(pos1,pos2, {"group:flora"}) end
+    if not food or #food < 1 then
+		food = minetest.find_nodes_in_area(pos1,pos2, {"group:flora"}) end
 	food = sortout(self,food)
 	if #food < 1 then return true end
 	--minetest.chat_send_all("### "..dump(#food).." ###")
 	local snack = food[random(#food)]
-	
+
     local func = function(self)
-    local pos = mobkit.get_stand_pos(self)
-	--water_life.temp_show(snack,10)
-	
-    
-    if mobkit.is_queue_empty_low(self) and self.isonground then
-		if pos and snack then	
-			if vector.distance(pos,snack) > 1 then
-				wildlife.hq_goto(self,prty + 1,snack)
-			else
-				self.object:set_velocity({x=0,y=0,z=0})
-                minetest.set_node(snack,{name="air"})
-                self.hungry = self.hungry + 5
-				return true
+        local pos = mobkit.get_stand_pos(self)
+		--water_life.temp_show(snack,10)
+        
+        if mobkit.is_queue_empty_low(self) and self.isonground then
+			if pos and snack then	
+				if vector.distance(pos,snack) > 1 then
+					wildlife.hq_goto(self,prty + 1,snack)
+				else
+					self.object:set_velocity({x=0,y=0,z=0})
+                    minetest.set_node(snack,{name="air"})
+                    self.hungry = self.hungry + 5
+					return true
+				end
 			end
 		end
+        mobkit.queue_high(self,func,prty)
 	end
-    mobkit.queue_high(self,func,prty)
 end
 
 
