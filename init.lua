@@ -85,9 +85,9 @@ function wildlife.hq_find_food(self,prty,radius)
 	
     
     if mobkit.is_queue_empty_low(self) and self.isonground then
-			
+		if pos and snack then	
 			if vector.distance(pos,snack) > 1 then
-				wildlife.hq_goto(self,prty+1,snack)
+				wildlife.hq_goto(self,prty + 1,snack)
 			else
 				self.object:set_velocity({x=0,y=0,z=0})
                 minetest.set_node(snack,{name="air"})
