@@ -303,21 +303,23 @@ end
 minetest.register_globalstep(spawnstep)
 
 minetest.register_entity("wildlife:wolf",{
-											-- common props
-	physical = true,
-	stepheight = 0.1,				--EVIL!
-	collide_with_objects = true,
-	collisionbox = {-0.3, -0.01, -0.3, 0.3, 0.7, 0.3},
-	visual = "mesh",
-	mesh = "wolf.b3d",
-	textures = {"kit_wolf.png"},
-	visual_size = {x = 1.3, y = 1.3},
-	static_save = true,
-	makes_footstep_sound = true,
+	initial_properties = 
+	{
+		physical = true,
+		stepheight = 0.1,				--EVIL!
+		collide_with_objects = true,
+		collisionbox = {-0.3, -0.01, -0.3, 0.3, 0.7, 0.3},
+		visual = "mesh",
+		mesh = "wolf.b3d",
+		textures = {"kit_wolf.png"},
+		visual_size = {x = 1.3, y = 1.3},
+		static_save = true,
+		makes_footstep_sound = true
+	},
 	on_step = mobkit.stepfunc,	-- required
 	on_activate = mobkit.actfunc,		-- required
 	get_staticdata = mobkit.statfunc,
-											-- api props
+	-- api props
 	springiness=0,
 	buoyancy = 0.75,
 	max_speed = 5,
@@ -359,16 +361,19 @@ minetest.register_entity("wildlife:wolf",{
 })
 
 minetest.register_entity("wildlife:deer",{
-	physical = true,
-	stepheight = 0.1,
-	collide_with_objects = true,
-	collisionbox = {-0.35, -0.19, -0.35, 0.35, 0.65, 0.35},
-	visual = "mesh",
-	mesh = "herbivore.b3d",
-	textures = {"herbivore.png"},
-	visual_size = {x = 1.3, y = 1.3},
-	static_save = true,
-	makes_footstep_sound = true,
+	initial_properties =
+	{
+		physical = true,
+		stepheight = 0.1,
+		collide_with_objects = true,
+		collisionbox = {-0.35, -0.19, -0.35, 0.35, 0.65, 0.35},
+		visual = "mesh",
+		mesh = "herbivore.b3d",
+		textures = {"herbivore.png"},
+		visual_size = {x = 1.3, y = 1.3},
+		static_save = true,
+		makes_footstep_sound = true
+	},
 	on_step = mobkit.stepfunc,
 	on_activate = mobkit.actfunc,
 	get_staticdata = mobkit.statfunc,
